@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const DBCONF = require('../config') ;
-const dbUrl = `mongodb://${DBCONF.DBAUTH}:${DBCONF.DBPASS}@192.168.1.15:27017/admin`;
+const dbUrl = `mongodb://${DBCONF.DBAUTH}:${DBCONF.DBPASS}@192.168.0.105:27017/admin`;
 
 var connection = null ;
 function open(){

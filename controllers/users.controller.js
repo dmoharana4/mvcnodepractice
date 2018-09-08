@@ -1,84 +1,81 @@
-var userobj = [{
-    name: "user1",
-    age: 25
-  }, {
-    name: "user2",
-    age: 35
-  },
-  {
-    name: "user3",
-    age: 35
-  }, {
-    name: "user4",
-    age: 35
-  }, {
-    name: "user5",
-    age: 35
-  },
-  {
-    name: "user6",
-    age: 35
-  }, {
-    name: "user7",
-    age: 35
-  }, {
-    name: "user8",
-    age: 35
-  },
-  {
-    name: "user9",
-    age: 35
-  }, {
-    name: "user10",
-    age: 35
-  }, {
-    name: "user11",
-    age: 35
-  }
-];
+let dbconn = require('../models/db.connection') ;
 
-
+var offset  = 0;
+var limit = 1 ;
 module.exports.getusers = (req, res) => {
-  res.status(200).json(userobj);
-  console.log("indide users bro");
+  var collection = dbconn.get().db('socially').collection('usersdata');
+  let query = {}
+  collection.find(query).skip(offset).limit(limit).toArray((err,dbres)=>{
+    if(err){
+      res.status(404).send('some problem in getting the database')
+    }else{
+      res.status(200).json(dbres) ;
+    }
+  });
 };
+module.exports.getuser = (req, res) => {
+};
+
 
 module.exports.getuser = (req, res) => {
-  var flag = true ;
-  for (var index in userobj) {
-    for (var key in userobj[index]) {
-      if (userobj[index][key] == req.query.name) {
-        res.status(200).json(userobj[index]);
-        flag = false ;
-        break ;
-      }
+  var collection = dbconn.get().db('socially').collection('usersdata');
+  let query = {name:req.query.name}
+  collection.findOne(query,(err,dbres)=>{
+    if(err){
+      res.status(404).send('some problem in getting the database')
+    }else{
+      res.status(200).send(dbres) ;
     }
-  }
-  if(flag){
-    res.status(200).send("user not found");
-  }
+  });
 };
-module.exports.putusers = (req, res) => {
-  var newuserobj = {}
-  newuserobj.name = req.query.name
-  newuserobj.age = req.query.age
-  userobj.push(newuserobj)
-  res.status(200).json(userobj);
-  console.log("successfully added bro");
+
+
+module.exports.adduser = (req, res) => {
+var newuser = req.body  ;
+var collection = dbconn.get().db('socially').collection('usersdata') ;
+if(req.body && req.body.name && req.body.pass){
+collection.insertOne(newuser,(err,dbres)=>{
+  if(err){
+    res.status(404).send("some error in inserting data")
+  }else{
+    res.status(200).json(dbres);
+  }
+})
+}else{
+  res.status(404).send('please fill all the required details')
+}
 };
-module.exports.deleteusers = (req, res) => {
-  var flag = true ;
-  for (var index in userobj) {
-    for (var key in userobj[index]) {
-      if (userobj[index][key] == req.query.name) {
-        res.status(200).json(userobj[index]);
-        userobj.splice(index,1)
-        flag = false ;
-        break ;
-      }
+
+module.exports.updateuser = (req, res , next) => {
+  var collection = dbconn.get().db('socially').collection("usersdata");
+  var user = req.body
+var filter = {name : user.name} ;
+var update = {$set:{pass:user.pass}}
+if(req.body && req.body.name && req.body.pass){
+  collection.updateOne(filter,update,(err,dbres)=>{
+    if(err){
+      res.status(404).send("some problem while updating data"+err)
+    }else{
+      res.status(200).json(dbres)
     }
+  })
+}else{
+  res.status(404).send('please fill all the required details')
+}
+};
+
+module.exports.removeuser = (req, res) => {
+var filter = {name:req.body.name};
+var collection = dbconn.get().db('socially').collection('usersdata');
+if(req.body && req.body.name){
+collection.deleteOne(filter,(err,dbres)=>{
+  if(err){
+    res.status(404).send("error while deleting the data") ;
+  }else{
+    res.status(200).json(dbres);
   }
-  if(flag){
-    res.status(200).send("user not found");
-  }
+})
+}else{
+  res.status(404).send('please fill the required fields')
+}
 };
