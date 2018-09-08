@@ -18,7 +18,7 @@ module.exports.getHotelsData = (req,res,next) => {
 module.exports.addHotel = (req,res,next) => {
   var hotel = req.body ;
   var collection = dbconn.get().db('socially').collection('postcalci');
-
+if(req.body && req.body.name && req.body.age && req.body.active){
   collection.insertOne(hotel,(err,dbres)=>{
     if(err){
       console.log("something wrong with the database"+err);
@@ -27,4 +27,47 @@ module.exports.addHotel = (req,res,next) => {
       res.status(200).json(hotel);
     }
   })
+}else{
+  res.status(200).send("please fill all the from details");
+}
+};
+
+
+
+module.exports.updateHotel = (req,res,next) => {
+  var hotel = req.body ;
+  console.log(hotel);
+  var collection = dbconn.get().db('socially').collection('postcalci');
+  if(hotel && hotel.filter && hotel.age && hotel.active){
+  let query = {name : hotel.filter} ;
+  let newvalues = {$set:{age : hotel.age , active : hotel.active}} ;
+  collection.updateOne(query,newvalues,(err,dbres)=>{
+    if(err){
+      res.status(200).send("there is some error in updating db");
+    }else{
+      res.status(200).json(dbres);
+    }
+  })
+}else{
+  res.status(404).send("please fill all the required info")
+}
+};
+
+module.exports.removeHotel = (req,res,next) => {
+  var hotel = req.body ;
+  console.log(hotel);
+  var collection = dbconn.get().db('socially').collection('postcalci');
+  if(hotel && hotel.filter ){
+    let query ={name:hotel.filter}  ;
+    collection.deleteOne(query,(err,dbres)=>{
+      if(err){
+        res.status(404).send("some problem while removing data") ;
+      }else{
+        res.status(200).json(dbres)
+      }
+    })
+  }else{
+    res.status(404).send('please fill all the required fields')
+  }
+
 };
