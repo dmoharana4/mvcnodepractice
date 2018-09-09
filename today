@@ -1,0 +1,187 @@
+query string 
+mapping uri using express
+
+
+app.set(key ,value) => for setting the propwrty to the object it is a setter method
+app.get => same as get just a setter method
+
+why use express
+1.not good routing in http module
+2.cross origin plTFORM
+3.middleware design
+sirs,
+http
+1.it is a module(a single file)
+2.in http module we  can form simple operations like managing incoming outgoing requests , http connections
+3.difficult to design middleware
+4. is a basic module eg  nokia 911
+express
+1.it is a framework(halfly developed software,or set of libraries and packages) 
+2.provides all the functionality of http modules along with better routing ,modularity,a better way of handling traffic,etc ...
+3.there are tons of middleware available fir express to complete the task such as ,CORS,post parsing(body parser),sessions , cookies ,file handlers .
+4. built on top of http module . eg a smart phone
+
+
+*both follows the client server architecture
+express is a better choice while building server side code
+
+
+
+
+
+dependencies installed in 2 ways
+1.local dependencies => within the project (node_modules) => npm install depname
+
+2.global dep => entire system (/var/lib/node_modules) => sudo npm install -g depname
+
+
+
+------------------------------------------------------------------------------------------------------
+
+1.read app object
+
+http protocols
+1.get => fetch data
+2.post => send data
+3.put => update
+4.delete => deleting
+5.path =>minor update 
+
+
+q.where are params used 
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+1. read about http protocol
+2.REST - representational state transfer :
+	*stateless api.
+	it is an architecture which can be used to design web services by using http protocol which follows
+1. client server 2. stateless 3. cacheble 4. layered system 5.uniform interface
+3.webservices - any service served over the internet . used generally for exchange of info
+	eg . soap based web services and restful based web services
+
+SOAP based web sewrevices:1. SOAP : simple object access protocol
+	SOAP  is a protocol and REST  is a architecture.
+	SOAP protocol was designed with certain specification(rules) which includes WSDL(web service 		descriptive lang) files , which has the required info based on that required info web services 		will be constructed .for this we have to learn WSDL lang.
+	SOAP api and REST  both work on HTTP protocol but in SOAP  api must use xml format only for 		sending and receiving all the messages or data .REST  uses different text formats eg HTML,XML,JSON etc for exchange of info but most preffered is JSON .
+Soap based api require more bandwidth since SOAP apis contain lot of info written in XML
+REST will not need much bandwidth , generally the data will ne in the JSON format which is light data.
+SOAP based uses service interface to expose the functionality in SOAP based WSDL files will provide the client with neccessary info which can be used to unserstand what service that webservice do offer.
+REST apis expose functionalities in the form of URI's client access URI to get data ,hardware,cpu,memory..
+
+4.SOAP apis - can send only xml and uses a language wsdl
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+
+
+1.HTTP status codes
+node server acts as a HTTP  server internally 
+
+status code has these things 
+	status code number and status code text
+	
+http status code can be of 5 types
+1.informative http sc 100-199
+	scnum 100 , status code text = everything is ok so far and client should continue with the request or ignore ,this code tells to cintinue intial part of the request accepted by  the server but request is not processed till yet
+
+scnum 101 :  switching ,  this code defines the response that we are wsitching a protocol eg.switching protocol from http to https and the protocol related info upgraded by request header by client and response will be shown as switching protocol 
+
+scnum 102 : processing ,this statuis cide defines that the request has been accepted by the serber and started proccessing
+
+
+
+
+2.successful http sc 200-299
+
+scnum 200 : ok , successful response , request has been succeeded the meanuing of success response varies depending on the http response ,if u say 
+GET - the resourse has been fetched and transmitted via server in the msg body ,
+HEAD : the data has been fetched and inserted into the header ,
+POST: the resource has been inserted and response sended as OK ,
+PUT : the reasource has been upadted and response sent as OK in the msg body , 
+DELETE: the resource has been deleted and response sent as OK in the msg body , 
+PATCH: THE minor changes in resorce has been updated and res sent in msg body
+
+scnum 201: created , the request has beeen accepted and resource is created 
+
+scnum 202: accepted , this sc defines the request has been accepted but not yet acted upon
+
+scnum 203:non authoritive information , this response tells user are not authorized to certain info available on server
+
+scnum 204: no content ,this reponse is sent when serveer has no info or content to send to the client in the msg body but header can br usefull 
+
+scnum 205:reset content ,the request has accomplished and response sent with the data to user agent server starting sending different data as compared to the previous
+
+scnum 206: partial content
+
+
+ 
+3.redirective http sc 300-399
+
+scnum 300: multiple choice , the requset has more than one possible response the user agent should choose any one of them and there is no way of standardised choosing
+
+scnum 301: moved permanently ,this response tells that requested uri / rerquested resource has been changed permanently and a new uri/resource will be given into the response
+
+scnum 302:found , temporary redirect , the requested uri/resource has been changed temply the new changes in the old uri will be given in the response 
+
+scnum 303: see other resource , the server sent this response to direct user or a client to get requested resource from another uri [possible only with GET ]
+ 
+scnum 304: not modified , this response generally used for cache it tells the client that response has not been modified by client so that the client will not download the cache again and continue with the same cache
+
+scnum 307: temporary redirect , the server will send thois response to direct the client to get a requested resource from another uri with same methods that he was using earlier[all methods eg GET,PUT...]
+
+scnum 308: permanent redirect , the resource has been shifted permanently to locate the same resource use different URI's or URLS that contain the new location of the resource [all HTTP methids allowed].
+
+
+
+4.client error http sc 400-499
+
+scnum 400 :bad request , the client sent request is not a valid request .
+
+scnum 401 : unauthorized , client is not authorized to perform this request  that means client must authenticate itself to get a correct requested resource. 
+
+scnum 402 : payment required , this sc is reserved for future use . 
+
+scnum 403 : forbidden , the client do not have an right access to the content .  
+
+scnum 404 : not found , server cannot find the requested resource this means the uri/url is unrecognized.
+
+scnum 405 : method not allowed , the requested resource / method is known by the server but has been disabled cannot be used . 
+
+scnum 406 : not acceptable , this response is sent when server defines that content are not allowed to navigate .
+
+scnum 407 : proxy authentication required , this is similar to 401 here proxy is required to authenticate.
+
+scnum 408 : timeout , this response is sent in ideal condition by server wahen the time limit expires for a request and server cannot more than the time limit becsause he has to server the next request 
+
+scnum 409 : conflicts ,this res is sent when req conflicts with the current satte of the server   
+
+
+
+5.server error http sc 500-599
+
+scnum 500:internal server error , this res is sent when server encounters a situation that he doesnt know how to handle
+
+scnum 501 : not implemented , the request method is not implemented till yet by the server right now cannot handle the request and this sc will sent only in GET and HEAD methods 
+
+scnum 502 : bad gateway , this is the error response that indicates server is not in  a state to be a proper gateaway to fullfill the request .
+
+scnum 503 : service unavailable ,this error response sent when server has a resource but currently cannot send a response that service is currmetly unavailable. 
+
+scnum 504L: gateway timeout , this response will send when server is unable to process a request in a given time .
+
+scnum 505: HTTP version not supported , this response is sent when your server does not support HTTP . 
+
+sccnum 507 :insufficient storage , this is a reponse related to server config which has insufficient storage 
+
+scnum 511 :required network authentication  ,  this sc indicates that client needs to authenticate network to get an access to resource .
+
+
+scp -v hotel-data.json vagrant@192.168.1.6:/home/vagrant/data
+
+
