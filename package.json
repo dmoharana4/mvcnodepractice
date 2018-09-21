@@ -13,8 +13,11 @@
   "author": "mayur",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "mongodb": "^3.1.4"
+    "jsonwebtoken": "^8.3.0",
+    "mongodb": "^3.1.4",
+    "mongoose": "^5.2.14"
   }
 }
