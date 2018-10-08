@@ -13,6 +13,5 @@ router.route('/user/register')
 .post(usersctrl.registration)
 router.route('/user/login')
 .post(usersctrl.login)
-.get(usersctrl.validateToken)
-router.route('/user/settings').patch(usersctrl.changepassword)
+router.route('/user/settings').patch(usersctrl.validateToken,usersctrl.changepassword)
 module.exports = router ;

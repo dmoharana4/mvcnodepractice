@@ -7,9 +7,11 @@ var ObjectId = require('mongodb').ObjectId ;
 
 module.exports.registration = (req,res,next)=>{
   let user = req.body
-  console.log(user);
   if(user.name && user.email && user.password && user.phone){
     // var salt = bcrypt.genSaltSync(10);
+    if(!user.role){
+      user.role='user';
+    }
   let hashPassword =  bcrypt.hashSync(user.password,15)
     var newUser = new User({
       name:user.name ,
@@ -23,14 +25,17 @@ module.exports.registration = (req,res,next)=>{
       if(err){
         res.status(500).json({payload:"failed to register user "+err})
       }else{
-        console.log(CONFIG.SECRETKEY);
         let token = jwt.sign({id:dbres['_id']},CONFIG.SECRETKEY)
-        res.status(200).json({payload:dbres ,message:"registration success",
-      auth:true , 'token':token} )
+        res.status(200)
+        .json({payload:{'user_id':dbres._id,'role':dbres.role} ,
+          'message':"registration success",
+          'auth':true ,
+          'token':token,
+         } )
       }
     })
   }else{
-    res.status(400).json({error:"please fill the all needed fields"})
+    res.status(400).json({error:"please fill the all needed fields"});
   }
 }
 
@@ -38,19 +43,23 @@ module.exports.registration = (req,res,next)=>{
 //----------------------------------------------------------------------------------
 
 module.exports.login = (req,res,next)=>{
-  let user = req.body
+  let user = req.body ;
+  console.log(user);
   if(user.email && user.password){
     User.findOne({email:user.email} , (err,dbres)=>{
       if(err){
         res.status(500).send("there was some errror in retrieving user data")
       }else{
-        console.log(dbres.email + "..." + dbres.password );
-        console.log(user.password);
       let loginflag =  bcrypt.compareSync(user.password,dbres.password) ;
       console.log(loginflag);
       if(loginflag){
-        res.status(200).json({status:"successfull login" ,dbres});
-
+        let token = jwt.sign({id:dbres['_id']},CONFIG.SECRETKEY)
+        res.status(200)
+          .json({payload:{'user_id':dbres._id,'role':dbres.role} ,
+                  'message':"login success",
+                  'auth':true ,
+                  'token':token
+                 } );
       }else{
         res.status(403).send("you are not a valid user")
       }
@@ -78,7 +87,12 @@ module.exports.changepassword = (req,res,next)=>{
         if(err){
           res.status(500).send("some error in changing password"+err)
         }else{
-          res.status(200).json(dbresponse)
+          res.status(200)
+          .json({payload:dbres ,
+            message:"password successfully changed",
+            auth:true ,
+             'role':'user'
+           } )
         }
         })
       }else{
@@ -92,7 +106,7 @@ module.exports.changepassword = (req,res,next)=>{
 
 //----------------------------------------------------------------------------------
 module.exports.validateToken = (req,res,next)=>{
-  var token  = req.headers.token ;
+  var token  = req.headers['x-access-token'];
   if(token){
     jwt.verify(token,CONFIG.SECRETKEY,function(error,jwtres){
       if (error) {
@@ -115,7 +129,6 @@ module.exports.validateToken = (req,res,next)=>{
               }
             })
           } else {
-            // res.status(200).send("sucess tokenized"+dbres);
             next() ;
           }
         })
@@ -131,6 +144,3 @@ module.exports.validateToken = (req,res,next)=>{
     })
   }
 }
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTI3ZjdlMmYxZmFmMzEwNGUxMDljYiIsImlhdCI6MTUzNzM3NjEyNn0.nppknRx76XkZYWiatI3IQerDA09p_c81tfgH5yqKD6w
-// 5ba27f7e2f1faf3104e109cb

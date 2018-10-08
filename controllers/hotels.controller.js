@@ -19,7 +19,27 @@ if (req.query && req.query.offset && req.query.count) {
     if(err){
       res.status(404).send('some problem in getting the database')
     }else{
-      res.status(200).json(dbres) ;
+      res.status(200)
+      .json({payload:dbres ,
+        message:"hotel found success",
+        auth:true ,
+         'role':'user'
+       } ) ;
+    }
+  });
+};
+
+module.exports.getAllHotels = (req, res) => {
+  Hotel.find().exec((err,dbres)=>{
+    if(err){
+      res.status(404).send('some problem in getting the database')
+    }else{
+      res.status(200)
+      .json({payload:dbres ,
+        message:"hotel found success",
+        auth:true ,
+         'role':'user'
+       } );
     }
   });
 };
@@ -37,14 +57,19 @@ if (req.query && req.query.offset && req.query.count) {
 // };
 
 module.exports.getHotelData = (req,res,next) => {
-  var id = req.query.id ;
+  var id = req.params.id ;
   console.log(id);
   Hotel.findById(id).exec((err,hotel)=>{
     if(err){
       console.log("cannot find error");
       res.status(404).send("some error occured while finding query");
     }else{
-      res.status(200).json(hotel)
+      res.status(200)
+      .json({payload:hotel ,
+        message:"hotel found success",
+        auth:true ,
+         'role':'user'
+       } )
     }
   })
 };
@@ -71,12 +96,17 @@ module.exports.getHotelData = (req,res,next) => {
 module.exports.addHotel = (req,res,next) => {
 if(req.body.name ){
   const hotel = new Hotel(req.body);
-  Hotel.save((err,dbres)=>{
+  hotel.save((err,dbres)=>{
     if(err){
       console.log("something wrong with the database"+err);
       res.status(200).send("some problem in inserting data"+err);
     }else{
-      res.status(200).json(dbres);
+      res.status(200)
+      .json({payload:dbres ,
+        message:"hotel added  successfully",
+        auth:true ,
+         'role':'hoteladmin'
+       } );
     }
   })
 }else{
@@ -114,7 +144,12 @@ module.exports.updateHotel = (req,res,next) => {
     if(err){
       res.status(200).send("there is some error in updating db");
     }else{
-      res.status(200).json(dbres);
+      res.status(200)
+      .json({payload:dbres ,
+        message:"hotel update success",
+        auth:true ,
+         'role':'hoteladmin'
+       } );
     }
   })
 }else{
@@ -131,7 +166,12 @@ module.exports.removeHotel = (req,res,next) => {
       if(err){
         res.status(404).send("some problem while removing data") ;
       }else{
-        res.status(200).json(dbres)
+        res.status(200)
+        .json({payload:dbres ,
+          message:"registration success",
+          auth:true ,
+           'role':'hoteladmin'
+         } )
       }
     })
   }else{

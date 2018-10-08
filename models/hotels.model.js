@@ -43,4 +43,4 @@ var hotelSchema = mongoose.Schema({
 });
 
 
-mongoose.model('HotelSchema' , hotelSchema , 'hotels.hotelsdata') ;
+mongoose.model('HotelSchema' , hotelSchema , 'hotel-data') ;

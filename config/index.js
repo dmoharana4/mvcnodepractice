@@ -1,15 +1,15 @@
 const host = '127.0.0.1' ;
 const port = 3050 ;
-const dbpass = 'ruyam' ;
-const dbuser = "rootUser" ;
-const dbauth  = "admin"
-const dbUrl = `mongodb://@192.168.0.106:27017/hotels`;
+const dbpass = 'mayur' ;
+const dbuser = "godofwar3" ;
+// const dbauth  = "admin" ;
+const dbUrl = `mongodb://mayur:godofwar3@ds115543.mlab.com:15543/hotelsdatabase`;
 const secretkey = "the developers pledge: change world"
 module.exports = {
   HOST:host,
   PORT:port,
   DBPASS:dbpass,
-  DBAUTH:dbauth ,
+  // DBAUTH:dbauth ,
   DBUSER:dbuser ,
   DBURL :dbUrl ,
   SECRETKEY :secretkey

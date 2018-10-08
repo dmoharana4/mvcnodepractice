@@ -4,19 +4,21 @@ require('./hotels.model') ;
 require('./users.model') ;
 require('./booking.model') ;
 
-const options = {
-  user: CONFIG.DBUSER ,
-  pass:CONFIG.DBPASS,
-  authSource:CONFIG.DBAUTH,
-  useNewUrlParser: true
-}
-mongoose.connect(CONFIG.DBURL,options) ;
+// const options = {
+//   user: CONFIG.DBUSER ,
+//   pass:CONFIG.DBPASS,
+//   // authSource:CONFIG.DBAUTH,
+//   useNewUrlParser: true
+// }
+// mongoose.connect(CONFIG.DBURL,options) ;
+mongoose.connect(CONFIG.DBURL) ;
+
 var dbConn = mongoose.connection ;
 
 
 
- dbConn.on('error',()=>{
-  console.error('databse connection failed bro')
+ dbConn.on('error',(error)=>{
+  console.error('databse connection failed bro and the error is :'+error)
 })
  dbConn.once('open',()=>{
   console.log('database connection success eith mongoose');
